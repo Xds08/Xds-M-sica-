@@ -2,109 +2,122 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>XDS MÚSICA - Conectado Você Ao Mundo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XDS MÚSICA - Rádio 24h</title>
 <style>
-:root{--red:#ff0a2e;--blue:#00a6ff;--white:#fff;--bg:#050712}
-*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,system-ui}
-body{background:#000;display:flex;justify-content:center}
-.app{width:100%;max-width:480px;background:var(--bg);min-height:100dvh;display:flex;flex-direction:column;border:1px solid #111;box-shadow:0 0 60px var(--red)}
-.header{height:72px;background:linear-gradient(90deg,var(--red),var(--blue));display:flex;align-items:center;gap:10px;padding:0 14px;box-shadow:0 0 25px var(--red);position:sticky;top:0;z-index:20}
-.logo{width:48px;height:48px;border-radius:14px;background:#000;display:grid;place-items:center;font-weight:900;font-size:22px;border:2px solid #fff;box-shadow:0 0 12px #fff}
-.playerBox{margin:14px;background:#0d0f1e;border:2px solid var(--red);border-radius:22px;padding:16px;box-shadow:0 0 35px var(--red);text-align:center}
-.vu{height:46px;display:flex;align-items:end;justify-content:center;gap:5px;margin:14px 0}
-.bar{width:7px;background:linear-gradient(var(--red),var(--blue),var(--white));border-radius:99px;animation:wave .6s infinite alternate}
-@keyframes wave{0%{height:8px}100%{height:44px}}
-audio{width:100%;margin-top:12px;border-radius:12px}
-.btnLive{background:linear-gradient(90deg,var(--red),var(--blue));border:none;color:#fff;padding:14px;border-radius:30px;width:100%;font-weight:900;margin-top:12px;cursor:pointer;box-shadow:0 0 20px var(--red);font-size:14px}
-.pedidos{margin:14px;background:#10101a;border-radius:16px;padding:14px;border:1px solid #222}
-.pedidos input{width:100%;padding:13px;border-radius:12px;border:1px solid var(--blue);background:#000;color:#fff;outline:none;margin:6px 0;font-size:14px}
-.itemPed{padding:11px;border-bottom:1px solid #222;font-size:13px;display:flex;justify-content:space-between;align-items:center;color:#ddd}
-.itemPed.dono{border-left:4px solid var(--red);background:linear-gradient(90deg,#1a0a0f,#10101a);color:#fff}
-#btnDono{background:#000;color:var(--red);border:1.5px solid var(--red);padding:8px 14px;border-radius:20px;font-size:11px;font-weight:900;cursor:pointer;margin-left:auto;box-shadow:0 0 10px #ff0a2e55}
-#btnDono.on{background:var(--red);color:#fff;box-shadow:0 0 18px var(--red)}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:linear-gradient(135deg,#0f0f0f,#3a0a5c);color:#fff;min-height:100vh}
+header{background:rgba(0,0,0,0.7);padding:15px;text-align:center;border-bottom:3px solid #ff00ff;position:sticky;top:0;z-index:100}
+.logo{font-size:28px;font-weight:900;color:#ff00ff;text-shadow:0 0 10px #ff00ff}
+.live{color:#0f0;background:#003300;padding:3px 10px;border-radius:20px;font-size:12px;margin-left:10px;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:0.3}}
+.container{max-width:900px;margin:20px auto;padding:15px;display:grid;grid-template-columns:1fr 320px;gap:15px}
+@media(max-width:700px){.container{grid-template-columns:1fr}}
+.player-card,.request-card,.owner-card{background:rgba(255,255,255,0.07);backdrop-filter:blur(10px);border-radius:15px;padding:20px;border:1px solid rgba(255,0,255,0.3)}
+.cover{width:100%;height:200px;background:linear-gradient(45deg,#ff00ff,#00ffff);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:80px;margin-bottom:15px}
+.song-title{font-size:22px;font-weight:bold}
+.artist{color:#ccc;margin-bottom:15px}
+.btn{padding:12px 20px;border:none;border-radius:25px;font-weight:bold;cursor:pointer}
+.btn-play{background:#ff00ff;color:#fff;width:100%;font-size:18px}
+.btn-owner{background:#333;color:#fff;font-size:12px;position:absolute;right:15px;top:15px}
+.btn-exit{background:#ff3333;color:#fff;margin-top:10px;width:100%}
+input{width:100%;padding:12px;border-radius:8px;border:none;margin:8px 0;background:#222;color:#fff}
+.listeners{background:#111;padding:10px;border-radius:8px;text-align:center;margin:10px 0}
+.owner-only{display:none}
+.owner-active .owner-only{display:block}
+.owner-active .guest-only{display:none}
+.playlist-item{padding:8px;background:rgba(0,0,0,0.3);margin:5px 0;border-radius:5px;display:flex;justify-content:space-between;align-items:center}
+.status{padding:10px;background:#111;border-radius:8px;margin:10px 0;text-align:center;font-size:13px;color:#0f0}
 </style>
 </head>
 <body>
-<div class="app">
-<div class="header"><div class="logo">XM</div><div><b style="font-size:16px;letter-spacing:.5px">XDS MÚSICA</b><div style="font-size:9px;font-weight:700">Conectado Você Ao Mundo</div></div><button id="btnDono">👑 DONO</button></div>
-
-<div class="playerBox">
-<h2 style="color:var(--red);text-shadow:0 0 12px var(--red);letter-spacing:1px">XDS MÚSICA</h2>
-<p style="color:var(--blue);font-size:11px;letter-spacing:1px;margin-top:2px">VERMELHO • BRANCO • AZUL NEON</p>
-<div class="vu"><div class="bar" style="animation-delay:.1s"></div><div class="bar" style="animation-delay:.2s"></div><div class="bar" style="animation-delay:.3s"></div><div class="bar" style="animation-delay:.1s"></div><div class="bar" style="animation-delay:.4s"></div><div class="bar" style="animation-delay:.2s"></div><div class="bar" style="animation-delay:.3s"></div></div>
-<div id="status" style="color:#fff;font-weight:800;font-size:14px">🔴 AO VIVO 24 HORAS</div>
-<audio id="player" controls autoplay>
-<source id="src" src="https://stream.zeno.fm/0r0xa8k8k8zuv" type="audio/mpeg">
-</audio>
-<button class="btnLive" id="btnGoLive">🎙️ ENTRAR AO VIVO COMO DONO</button>
-<div style="margin-top:8px;font-size:10px;color:#555">LINK ATUAL: <span id="linkTxt" style="color:#888">zeno.fm - troque no painel</span></div>
-</div>
-
-<div id="painelDono" style="display:none;margin:14px;background:#000;border:2px solid var(--red);border-radius:16px;padding:14px;box-shadow:0 0 30px var(--red)">
-<b style="color:var(--red);font-size:14px">👑 PAINEL DO DONO - XDS MÚSICA</b>
-<div style="font-size:11px;color:#888;margin:4px 0 10px">Só você vê isso. Senha: XDS2024</div>
-<div style="display:flex;flex-direction:column;gap:8px">
-<button id="btnMudarLink" style="padding:13px;border-radius:11px;background:var(--blue);color:#fff;border:none;font-weight:900;cursor:pointer">🔗 Mudar link da rádio (Zeno)</button>
-<button id="btnMudarSenha" style="padding:13px;border-radius:11px;background:#fff;color:#000;border:none;font-weight:900;cursor:pointer">🔑 Mudar minha senha de dono</button>
-<button id="btnLimpar" style="padding:13px;border-radius:11px;background:#1a1a1a;color:#fff;border:1px solid #333;cursor:pointer">🗑️ Limpar todos os pedidos</button>
-<button id="btnSairDono" style="padding:13px;border-radius:11px;background:#222;color:#777;border:none;cursor:pointer">Sair do modo dono</button>
+<header>
+<span class="logo">XDS MÚSICA</span><span class="live">● AO VIVO 24H</span>
+<button class="btn btn-owner" id="ownerBtn" onclick="toggleOwner()">👑 DONO</button>
+</header>
+<div class="container">
+<div>
+<div class="player-card">
+<div class="cover">🎵</div>
+<div class="song-title" id="nowTitle">Clique em PLAY para começar</div>
+<div class="artist" id="nowArtist">Rádio XDS MÚSICA</div>
+<audio id="audioPlayer" controls style="width:100%;margin:10px 0"></audio>
+<button class="btn btn-play" onclick="playRadio()">▶️ TOCAR RÁDIO</button>
+<div class="listeners">👥 <span id="listenerCount">1</span> ouvintes online</div>
+<div class="status" id="statusMsg">Rádio pronta! Seus amigos já podem ouvir sem senha.</div>
+<div id="queueList" style="margin-top:15px"></div>
 </div>
 </div>
-
-<div class="pedidos">
-<b style="color:var(--blue)">🎵 PEÇA SUA MÚSICA NA XDS MÚSICA</b>
-<input id="nomePed" placeholder="Seu nome (ex: Paulo)">
-<input id="musicaPed" placeholder="Música (ex: Ana Castela - Solteiro Forçado)">
-<button class="btnLive" id="btnPedir" style="background:#fff;color:#000;box-shadow:none">ENVIAR PEDIDO 🔊</button>
-<div id="listPed" style="margin-top:14px;max-height:320px;overflow:auto"></div>
+<div>
+<div class="request-card guest-only">
+<h3>🎤 Peça sua música</h3>
+<input type="text" id="reqName" placeholder="Seu nome">
+<input type="text" id="reqSong" placeholder="Música - Artista">
+<button class="btn btn-play" onclick="requestSong()">ENVIAR PEDIDO</button>
+<p style="font-size:11px;color:#aaa;margin-top:10px">Você não precisa de senha!</p>
 </div>
-
-<div style="text-align:center;padding:14px;font-size:10px;color:#444">XDS MÚSICA - Conectado Você Ao Mundo<br>Vermelho Branco Azul Neon</div>
+<div class="request-card">
+<h3>📋 Pedidos</h3>
+<div id="requestList"><p style="color:#888">Nenhum pedido</p></div>
 </div>
-
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getFirestore,collection,addDoc,onSnapshot,query,orderBy,serverTimestamp,getDocs,deleteDoc,doc}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-let SENHA_DONO = localStorage.getItem("xds_senha") || "XDS2024";
-const cfg={apiKey:"AIzaSyDnjiFQtTu8A5vZ3NHEIl_zG9ylMKTv6b8",authDomain:"talkxds.firebaseapp.com",projectId:"talkxds",storageBucket:"talkxds.firebasestorage.app",messagingSenderId:"757013602887",appId:"1:757013602887:web:6627ff87623d698e7d8762"};
-const appF=initializeApp(cfg);const db=getFirestore(appF);
-let isDono=localStorage.getItem("tx_dono")==="1";
-function atualizaBtnDono(){const b=document.getElementById("btnDono");if(isDono){b.textContent="👑 DONO ON";b.classList.add("on");document.getElementById("painelDono").style.display="block";}else{b.textContent="👑 DONO";b.classList.remove("on");document.getElementById("painelDono").style.display="none";}}
-atualizaBtnDono();
-document.getElementById("linkTxt").textContent=localStorage.getItem("tx_radio_link")||"https://stream.zeno.fm/0r0xa8k8k8zuv";
-const savedLink=localStorage.getItem("tx_radio_link");if(savedLink){document.getElementById("src").src=savedLink;document.getElementById("linkTxt").textContent=savedLink;}
-document.getElementById("btnDono").onclick=()=>{
- if(isDono){const p=document.getElementById("painelDono");p.style.display=p.style.display==="none"?"block":"none";return;}
- let s=prompt(`Digite a senha de DONO da XDS MÚSICA:\nSenha atual: ${SENHA_DONO}`);if(s===SENHA_DONO){isDono=true;localStorage.setItem("tx_dono","1");alert("👑 Bem-vindo DONO da XDS MÚSICA!");atualizaBtnDono();}else if(s!==null){alert("Senha errada! Senha correta é: "+SENHA_DONO);}
-};
-document.getElementById("btnSairDono").onclick=()=>{isDono=false;localStorage.removeItem("tx_dono");atualizaBtnDono();alert("Saiu do modo dono");};
-document.getElementById("btnMudarLink").onclick=()=>{let l=prompt("Cole seu link do Zeno.fm da rádio XDS MÚSICA:","https://stream.zeno.fm/");if(l){document.getElementById("src").src=l;document.getElementById("player").load();document.getElementById("player").play();localStorage.setItem("tx_radio_link",l);document.getElementById("linkTxt").textContent=l;document.getElementById("status").textContent="🔴 XDS MÚSICA AO VIVO";}};
-document.getElementById("btnMudarSenha").onclick=()=>{let n=prompt("Digite nova senha de dono:","");if(n&&n.length>=4){SENHA_DONO=n;localStorage.setItem("xds_senha",n);alert("Senha nova salva: "+n);}else{alert("Senha precisa ter 4 letras no mínimo");}};
-document.getElementById("btnGoLive").onclick=()=>{if(!isDono){alert("Só o DONO pode entrar ao vivo. Clique em 👑 DONO e digite sua senha.");return;}window.open("https://zeno.fm/broadcasting","_blank");alert("XDS MÚSICA - AO VIVO:\n1. Login no Zeno.fm\n2. Clique GO LIVE\n3. Selecione Microfone\n4. Fale - todos escutam!");};
-document.getElementById("btnPedir").onclick=async()=>{
- const nome=document.getElementById("nomePed").value||"Ouvinte";
- const musica=document.getElementById("musicaPed").value.trim();
- if(!musica)return alert("Digite a música!");
- const tag=isDono?"👑 DONO XDS MÚSICA":"🎵";
- await addDoc(collection(db,"pedidos_xds_musica"),{nome:`${tag} ${nome}`,musica,hora:serverTimestamp(),dono:isDono});
- document.getElementById("musicaPed").value="";alert("Pedido enviado pra XDS MÚSICA!");
-};
-document.getElementById("btnLimpar").onclick=async()=>{
- if(!isDono)return;if(!confirm("Apagar todos os pedidos da XDS MÚSICA?"))return;
- const snap=await getDocs(collection(db,"pedidos_xds_musica"));for(const d of snap.docs){await deleteDoc(doc(db,"pedidos_xds_musica",d.id));}
-};
-const q=query(collection(db,"pedidos_xds_musica"),orderBy("hora","desc"));
-onSnapshot(q,s=>{
- const list=document.getElementById("listPed");list.innerHTML="";
- s.forEach(d=>{
-  const m=d.data();const div=document.createElement("div");div.className="itemPed"+(m.dono?" dono":"");
-  div.innerHTML=`<span><b>${m.nome}</b><br><span style="color:${m.dono?'var(--red)':'#aaa'}">${m.musica}</span></span><span>${m.dono?'👑':'🔊'}</span>`;
-  list.appendChild(div);
- });
- if(s.empty){list.innerHTML='<div style="text-align:center;color:#444;padding:22px">Nenhum pedido ainda na XDS MÚSICA.<br>Seja o primeiro ouvinte!</div>';}
-});
-</script>
-</body>
-</html>
-1
+<div class="owner-card owner-only" style="margin-top:15px;border:2px solid #0f0">
+<h3>👑 PAINEL DO DONO</h3>
+<p style="font-size:12px;color:#0f0">Só você vê isso</p>
+<input type="text" id="addSongTitle" placeholder="Add música">
+<input type="text" id="addSongUrl" placeholder="Link MP3 (opcional)">
+<button class="btn btn-play" onclick="addToPlaylist()" style="background:#0a0">+ ADD NA PLAYLIST</button>
+<div id="ownerRequests" style="margin-top:10px"></div>
+<button class="btn btn-exit" onclick="logoutOwner()">SAIR DO MODO DONO</button>
+</div>
+</div>
+</div>
+<div id="loginModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:999;align-items:center;justify-content:center">
+<div style="background:#222;padding:30px;border-radius:15px;width:90%;max-width:350px;text-align:center;border:2px solid #ff00ff">
+<h2>👑 Área do Dono</h2>
+<input type="password" id="ownerPass" placeholder="Senha">
+<button class="btn btn-play" onclick="loginOwner()">ENTRAR</button>
+<button class="btn" onclick="closeModal()" style="background:#333;color:#fff;width:100%;margin-top:10px">CANCELAR</button>
+<p style="font-size:11px;margin-top:10px;color:#666">Senha: XDS2024</p>
+</div>
+</div>
+<script>
+const OWNER_PASSWORD="XDS2024";
+let isOwner=false;
+let requests=JSON.parse(localStorage.getItem('xds_requests')||'[]');
+let playlist=JSON.parse(localStorage.getItem('xds_playlist')||'null') || [
+{title:"XDS MÚSICA - Abertura",artist:"Rádio 24h",url:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"},
+{title:"Batidão do XDS",artist:"XDS",url:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"},
+{title:"Festa na Caucaia",artist:"XDS",url:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"}
+];
+let currentIndex=0;
+const audio=document.getElementById('audioPlayer');
+function playRadio(){
+if(playlist.length===0)return;
+audio.src=playlist[currentIndex].url;
+audio.play();
+document.getElementById('nowTitle').innerText=playlist[currentIndex].title;
+document.getElementById('nowArtist').innerText=playlist[currentIndex].artist;
+document.getElementById('statusMsg').innerText="🔊 Tocando ao vivo!";
+updateQueue();
+}
+audio.onended=()=>{currentIndex=(currentIndex+1)%playlist.length;playRadio();};
+function requestSong(){
+const name=document.getElementById('reqName').value.trim();
+const song=document.getElementById('reqSong').value.trim();
+if(!name||!song){alert("Preencha nome e música!");return;}
+requests.push({name,song,time:new Date().toLocaleTimeString(),id:Date.now()});
+localStorage.setItem('xds_requests',JSON.stringify(requests));
+document.getElementById('reqSong').value="";
+renderRequests();
+alert("✅ Pedido enviado!");
+}
+function renderRequests(){
+const list=document.getElementById('requestList');
+const ownerList=document.getElementById('ownerRequests');
+if(requests.length===0){list.innerHTML='<p style="color:#888">Nenhum pedido</p>';if(ownerList)ownerList.innerHTML='';return;}
+list.innerHTML=requests.map(r=>`<div class="playlist-item"><span><b>${r.name}</b><br><small>${r.song}</small></span><small>${r.time}</small></div>`).join('');
+if(isOwner&&ownerList){
+ownerList.innerHTML='<h4>Pedidos para aprovar:</h4>'+requests.map(r=>`<div class="playlist-item"><span>${r.name} - ${r.song}</span><button onclick="approveReq(${r.id})" style="background:#0a0;color:#fff;border:none;padding:5px 10px;border-radius:5px">TOCAR</button> <button onclick="removeReq(${r.id})" style="background:#a00;color:#fff;border:none;padding:5px;border-radius:5px">X</button></div>`).join('');
+}
+}
+function approveReq(id){const req=requests.find(r=>r.id===id);if(!req)return;playlist.push({title:req.song,artist:"Pedido de "+req.name,url:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3"});localStorage.setItem('xds_play

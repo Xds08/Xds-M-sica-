@@ -3,134 +3,571 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>XDS MÚSICA - AO VIVO 24H</title>
+<title>XDS MÚSICA - AO VIVO</title>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:linear-gradient(135deg,#0f0f0f,#3a0a5c);color:#fff;min-height:100vh}
-header{background:rgba(0,0,0,0.8);padding:15px;text-align:center;border-bottom:3px solid #ff00ff;position:sticky;top:0;z-index:100;display:flex;justify-content:center;align-items:center;gap:15px}
-.logo{font-size:28px;font-weight:900;color:#ff00ff}
-.live{color:#0f0;background:#003300;padding:4px 12px;border-radius:20px;font-size:12px}
-.btn-owner{position:absolute;right:15px;top:12px;background:#333;color:#fff;border:none;padding:8px 15px;border-radius:20px;cursor:pointer}
-.container{max-width:1000px;margin:15px auto;padding:15px;display:grid;grid-template-columns:1.2fr 0.8fr;gap:15px}
-@media(max-width:768px){.container{grid-template-columns:1fr}}
-.card{background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);border-radius:15px;padding:20px;border:1px solid rgba(255,0,255,0.3);margin-bottom:15px}
-.cover{width:100%;height:180px;background:linear-gradient(45deg,#ff00ff,#00ffff);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:70px;margin-bottom:15px}
-.song-title{font-size:20px;font-weight:bold}
-.artist{color:#ccc;margin:5px 0 15px;font-size:14px}
-.btn{padding:12px 20px;border:none;border-radius:25px;font-weight:bold;cursor:pointer}
-.btn-play{background:linear-gradient(45deg,#ff00ff,#ff6600);color:#fff;width:100%;font-size:18px}
-audio{width:100%;margin:10px 0}
-input{width:100%;padding:12px;border-radius:8px;border:1px solid #444;margin:6px 0;background:#1a1a1a;color:#fff}
-.status{padding:10px;background:#111;border-radius:8px;margin:10px 0;text-align:center;font-size:13px}
-.playlist-item{padding:10px;background:rgba(0,0,0,0.4);margin:6px 0;border-radius:8px;display:flex;justify-content:space-between;align-items:center}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#071b46,#102d69,#b40020);
+color:white;
+min-height:100vh;
+}
+
+header{
+background:#071b46;
+padding:20px;
+text-align:center;
+border-bottom:4px solid #e60026;
+}
+
+.logo{
+font-size:30px;
+font-weight:900;
+color:white;
+}
+
+.logo span{
+color:#ff243f;
+}
+
+.live{
+display:inline-block;
+background:#d90025;
+padding:6px 15px;
+border-radius:20px;
+font-size:12px;
+margin-top:8px;
+}
+
+button{
+cursor:pointer;
+border:none;
+border-radius:10px;
+padding:12px;
+font-weight:bold;
+}
+
+.container{
+max-width:1000px;
+margin:20px auto;
+padding:15px;
+display:grid;
+grid-template-columns:1.2fr .8fr;
+gap:15px;
+}
+
+@media(max-width:700px){
+.container{grid-template-columns:1fr}
+}
+
+.card{
+background:#ffffff12;
+border:1px solid #ffffff40;
+border-radius:18px;
+padding:20px;
+margin-bottom:15px;
+}
+
+.cover{
+height:190px;
+background:linear-gradient(135deg,#e60026,#ffffff,#123c91);
+border-radius:15px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:65px;
+margin-bottom:18px;
+}
+
+.song-title{
+font-size:21px;
+font-weight:bold;
+}
+
+.artist{
+color:#ddd;
+margin:8px 0;
+}
+
+audio{
+width:100%;
+margin:15px 0;
+}
+
+.btn-play{
+width:100%;
+background:#e60026;
+color:white;
+font-size:18px;
+padding:16px;
+}
+
+.btn-next{
+background:#123c91;
+color:white;
+width:100%;
+margin-top:10px;
+}
+
+input{
+width:100%;
+padding:13px;
+margin:7px 0;
+border-radius:8px;
+border:none;
+background:white;
+color:#111;
+}
+
+.status{
+background:#071b46;
+padding:12px;
+border-radius:10px;
+text-align:center;
+margin-top:12px;
+}
+
+.playlist-item{
+background:#071b46;
+padding:12px;
+border-radius:9px;
+margin-top:8px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:8px;
+}
+
 .owner-only{display:none}
-.owner-active .owner-only{display:block !important}
+.owner-active .owner-only{display:block}
 .owner-active .guest-only{display:none}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:999;align-items:center;justify-content:center}
-.modal-box{background:#222;padding:25px;border-radius:15px;width:92%;max-width:360px;text-align:center;border:2px solid #ff00ff}
+
+.owner-btn{
+background:#e60026;
+color:white;
+}
+
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:#000d;
+z-index:100;
+align-items:center;
+justify-content:center;
+}
+
+.modal-box{
+background:#071b46;
+padding:25px;
+width:90%;
+max-width:350px;
+border-radius:15px;
+}
+
+.small-btn{
+padding:7px;
+background:#e60026;
+color:white;
+}
+
 </style>
 </head>
+
 <body>
+
 <header>
-<div><span class="logo">XDS MÚSICA</span> <span class="live">● AO VIVO</span></div>
-<button class="btn-owner" id="ownerBtn" onclick="toggleOwner()">👑 DONO</button>
+<div class="logo">XDS <span>MÚSICA</span></div>
+<div class="live">● RÁDIO ONLINE</div>
+<button class="owner-btn" onclick="toggleOwner()">
+👑 DONO
+</button>
 </header>
+
 <div class="container">
+
 <div>
+
 <div class="card">
+
 <div class="cover" id="cover">🎵</div>
-<div class="song-title" id="nowTitle">XDS MÚSICA está OFF</div>
-<div class="artist" id="nowArtist">Clique em TOCAR para iniciar</div>
-<audio id="audio" controls playsinline></audio>
-<button class="btn btn-play" onclick="playRadio()">▶️ TOCAR RÁDIO AGORA</button>
-<div class="status"><span id="status">⏸️ Parada - Clique em TOCAR</span><br><small>👥 <span id="listeners">1</span> ouvindo</small></div>
-<div id="nextList" style="margin-top:15px"></div>
+
+<div class="song-title" id="nowTitle">
+XDS MÚSICA
 </div>
-<div class="card guest-only">
-<h3>🎤 Peça sua música (sem senha)</h3>
-<input type="text" id="guestName" placeholder="Seu nome">
-<input type="text" id="guestSong" placeholder="Música - Artista">
-<button class="btn btn-play" onclick="sendRequest()" style="margin-top:8px">ENVIAR PEDIDO 🎶</button>
+
+<div class="artist" id="nowArtist">
+Escolha uma música para começar
 </div>
+
+<audio id="audio" controls playsinline preload="none"></audio>
+
+<button class="btn-play" onclick="playRadio()">
+▶️ PLAY / TOCAR RÁDIO
+</button>
+
+<button class="btn-next" onclick="nextSong()">
+⏭️ PRÓXIMA MÚSICA
+</button>
+
+<div class="status" id="status">
+⏸️ Rádio parada
 </div>
-<div>
+
+</div>
+
 <div class="card">
-<h3>📋 Pedidos ao vivo</h3>
-<div id="liveRequests"><p style="color:#888">Nenhum pedido ainda</p></div>
+<h3>🎶 PLAYLIST</h3>
+<div id="playlist"></div>
 </div>
-<div class="card owner-only" style="border:2px solid #0f0">
-<h3>👑 PAINEL DO DONO (só você vê)</h3>
-<p style="color:#0f0;font-size:12px">Logado como dono</p>
-<input type="text" id="newTitle" placeholder="Nome da música">
-<input type="text" id="newUrl" placeholder="Link MP3 (opcional)">
-<button class="btn btn-play" onclick="addSong()" style="background:#0a0;margin-top:5px">+ ADD NA RÁDIO</button>
-<div id="ownerQueue" style="margin-top:12px"></div>
-<button class="btn" onclick="logoutOwner()" style="background:#a00;color:#fff;width:100%;margin-top:15px">🚪 SAIR DO MODO DONO</button>
+
+<div class="card guest-only">
+<h3>🎤 Peça sua música</h3>
+<input id="guestName" placeholder="Seu nome">
+<input id="guestSong" placeholder="Nome da música">
+<button class="btn-play" onclick="sendRequest()">
+ENVIAR PEDIDO
+</button>
+</div>
+
+</div>
+
+<div>
+
+<div class="card">
+<h3>📻 Sobre a rádio</h3>
+<p style="margin-top:12px">
+Bem-vindo à XDS MÚSICA!
+Sua companhia musical.
+</p>
+</div>
+
+<div class="card">
+<h3>📋 Pedidos musicais</h3>
+<div id="requests">Nenhum pedido ainda.</div>
+</div>
+
+<div class="card owner-only">
+<h3>👑 PAINEL DO DONO</h3>
+
+<input id="newTitle" placeholder="Nome da música">
+
+<input id="newArtist" placeholder="Artista">
+
+<input id="newUrl" placeholder="Link direto do MP3">
+
+<button class="btn-play" onclick="addSong()">
+➕ ADICIONAR MÚSICA
+</button>
+
+<button class="btn-next" onclick="logoutOwner()">
+SAIR DO PAINEL
+</button>
+
+</div>
+
 </div>
 </div>
-</div>
+
 <div class="modal" id="loginModal">
 <div class="modal-box">
-<h2>👑 Só o Dono Entra</h2>
-<input type="password" id="passInput" placeholder="Digite sua senha">
-<button class="btn btn-play" onclick="doLogin()">ENTRAR COMO DONO</button>
-<button class="btn" onclick="closeModal()" style="background:#333;color:#fff;width:100%;margin-top:10px">CANCELAR</button>
-<p style="font-size:11px;color:#666;margin-top:10px">Senha: XDS2024</p>
+<h2>👑 PAINEL DO DONO</h2>
+<input type="password" id="password" placeholder="Senha do dono">
+<button class="btn-play" onclick="login()">ENTRAR</button>
+<button class="btn-next" onclick="closeModal()">CANCELAR</button>
 </div>
 </div>
+
 <script>
-const OWNER_PASS="XDS2024";
-let isOwner=false;
+
+const OWNER_PASS="XDS2026";
+
+const audio=document.getElementById("audio");
+
+let playlist=JSON.parse(
+localStorage.getItem("xds_playlist")||"[]"
+);
+
+let requests=JSON.parse(
+localStorage.getItem("xds_requests")||"[]"
+);
+
 let currentIdx=0;
-let playlist=[
-{title:"XDS MÚSICA - Vinheta",artist:"Rádio 24h",url:"https://cdn.pixabay.com/audio/2021/11/09/audio_8cfa64d15a.mp3"},
-{title:"Batida de Caucaia",artist:"XDS MÚSICA",url:"https://cdn.pixabay.com/audio/2022/06/07/audio_b9bd4170e8.mp3"},
-{title:"Forró do XDS",artist:"XDS",url:"https://cdn.pixabay.com/audio/2022/03/15/audio_4d9a9871f5.mp3"}
-];
-let requests=JSON.parse(localStorage.getItem('xds_pro_requests')||'[]');
-const audio=document.getElementById('audio');
-function playRadio(){
-const track=playlist[currentIdx];
-audio.src=track.url;
-audio.play().then(()=>{
-document.getElementById('nowTitle').innerText=track.title;
-document.getElementById('nowArtist').innerText=track.artist;
-document.getElementById('status').innerText="🔊 TOCANDO AO VIVO";
-document.getElementById('cover').innerText="🔊";
-renderQueue();
-}).catch(e=>{alert("Clique de novo em TOCAR! O navegador bloqueou.");});
+let isOwner=false;
+
+function savePlaylist(){
+localStorage.setItem(
+"xds_playlist",
+JSON.stringify(playlist)
+);
 }
-audio.onended=()=>{currentIdx=(currentIdx+1)%playlist.length;playRadio();};
+
+function renderPlaylist(){
+
+const box=document.getElementById("playlist");
+
+if(!playlist.length){
+box.innerHTML="<p>Nenhuma música adicionada.</p>";
+return;
+}
+
+box.innerHTML=playlist.map((song,i)=>`
+
+<div class="playlist-item">
+
+<div onclick="playIndex(${i})" style="cursor:pointer">
+${i===currentIdx?"▶️ ":"🎵 "}
+${escapeHTML(song.title)}
+<br>
+<small>${escapeHTML(song.artist||"XDS MÚSICA")}</small>
+</div>
+
+${isOwner?`
+<button class="small-btn" onclick="removeSong(${i})">X</button>
+`:""}
+
+</div>
+
+`).join("");
+
+}
+
+function escapeHTML(value){
+return String(value).replace(/[&<>"']/g,c=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[c]));
+}
+
+async function playRadio(){
+
+if(!playlist.length){
+alert("Adicione uma música MP3 no painel do dono!");
+return;
+}
+
+await playIndex(currentIdx);
+
+}
+
+async function playIndex(index){
+
+if(index<0||index>=playlist.length)return;
+
+currentIdx=index;
+
+const song=playlist[currentIdx];
+
+audio.pause();
+audio.src=song.url;
+audio.load();
+
+document.getElementById("nowTitle").textContent=song.title;
+document.getElementById("nowArtist").textContent=song.artist||"XDS MÚSICA";
+
+document.getElementById("status").textContent="⏳ Carregando música...";
+
+renderPlaylist();
+
+try{
+
+await audio.play();
+
+document.getElementById("status").textContent="🔊 TOCANDO AGORA";
+
+document.getElementById("cover").textContent="🔊";
+
+}catch(error){
+
+document.getElementById("status").textContent="❌ Não foi possível tocar";
+
+alert("Erro ao tocar. Confira o link MP3 e tente novamente.");
+
+}
+
+}
+
+function nextSong(){
+
+if(!playlist.length)return;
+
+currentIdx=(currentIdx+1)%playlist.length;
+
+playIndex(currentIdx);
+
+}
+
+audio.addEventListener("ended",nextSong);
+
+audio.addEventListener("error",()=>{
+document.getElementById("status").textContent="❌ Erro no áudio";
+});
+
+function addSong(){
+
+const title=document.getElementById("newTitle").value.trim();
+const artist=document.getElementById("newArtist").value.trim();
+const url=document.getElementById("newUrl").value.trim();
+
+if(!title||!url){
+alert("Preencha o nome e o link MP3!");
+return;
+}
+
+try{
+
+const parsed=new URL(url);
+
+if(parsed.protocol!=="https:"&&parsed.protocol!=="http:"){
+alert("Link inválido!");
+return;
+}
+
+}catch(e){
+
+alert("Digite um link válido!");
+return;
+
+}
+
+playlist.push({title,artist,url});
+
+savePlaylist();
+renderPlaylist();
+
+document.getElementById("newTitle").value="";
+document.getElementById("newArtist").value="";
+document.getElementById("newUrl").value="";
+
+alert("Música adicionada!");
+
+}
+
+function removeSong(index){
+
+if(!confirm("Remover esta música?"))return;
+
+if(index===currentIdx){
+audio.pause();
+audio.removeAttribute("src");
+audio.load();
+}
+
+playlist.splice(index,1);
+
+if(index<currentIdx)currentIdx--;
+if(currentIdx>=playlist.length)currentIdx=0;
+
+savePlaylist();
+renderPlaylist();
+
+}
+
 function sendRequest(){
-const name=document.getElementById('guestName').value.trim();
-const song=document.getElementById('guestSong').value.trim();
-if(!name||!song){alert("Digite nome e música!");return;}
-requests.unshift({id:Date.now(),name,song,time:new Date().toLocaleTimeString()});
-localStorage.setItem('xds_pro_requests',JSON.stringify(requests));
-document.getElementById('guestSong').value="";
+
+const name=document.getElementById("guestName").value.trim();
+const song=document.getElementById("guestSong").value.trim();
+
+if(!name||!song){
+alert("Preencha seu nome e a música!");
+return;
+}
+
+requests.unshift({name,song});
+
+localStorage.setItem(
+"xds_requests",
+JSON.stringify(requests)
+);
+
 renderRequests();
-alert("✅ Pedido enviado!");
+
+document.getElementById("guestSong").value="";
+
+alert("Pedido enviado!");
+
 }
+
 function renderRequests(){
-const box=document.getElementById('liveRequests');
-const ownerBox=document.getElementById('ownerQueue');
-if(requests.length===0){box.innerHTML='<p style="color:#888">Nenhum pedido</p>';if(ownerBox)ownerBox.innerHTML='';return;}
-box.innerHTML=requests.slice(0,10).map(r=>`<div class="playlist-item"><div><b>${r.name}</b><br><small>${r.song}</small></div><small>${r.time}</small></div>`).join('');
-if(isOwner&&ownerBox){
-ownerBox.innerHTML='<h4>Pedidos:</h4>'+requests.map(r=>`<div class="playlist-item"><div><b>${r.name}</b>: ${r.song}</div><div><button onclick="playRequest(${r.id})" style="background:#0a0;color:#fff;border:none;padding:6px 10px;border-radius:6px">TOCAR</button> <button onclick="delRequest(${r.id})" style="background:#a00;color:#fff;border:none;padding:6px;border-radius:6px">X</button></div></div>`).join('');
+
+const box=document.getElementById("requests");
+
+if(!requests.length){
+box.textContent="Nenhum pedido ainda.";
+return;
 }
+
+box.innerHTML=requests.slice(0,20).map(r=>`
+<div class="playlist-item">
+<div>
+<b>${escapeHTML(r.name)}</b><br>
+${escapeHTML(r.song)}
+</div>
+</div>
+`).join("");
+
 }
-function playRequest(id){const req=requests.find(r=>r.id===id);if(!req)return;playlist.splice(currentIdx+1,0,{title:req.song,artist:"Pedido de "+req.name,url:"https://cdn.pixabay.com/audio/2022/03/10/audio_7b79d849b3.mp3"});currentIdx++;playRadio();delRequest(id);}
-function delRequest(id){requests=requests.filter(r=>r.id!==id);localStorage.setItem('xds_pro_requests',JSON.stringify(requests));renderRequests();}
-function addSong(){const t=document.getElementById('newTitle').value.trim();let u=document.getElementById('newUrl').value.trim();if(!t){alert("Digite nome");return;}if(!u)u="https://cdn.pixabay.com/audio/2021/08/04/audio_0625c1539c.mp3";playlist.push({title:t,artist:"XDS MÚSICA",url:u});document.getElementById('newTitle').value="";document.getElementById('newUrl').value="";renderQueue();alert("Adicionada!");}
-function renderQueue(){document.getElementById('nextList').innerHTML='<h4>🎶 Próximas:</h4>'+playlist.map((p,i)=>`<div class="playlist-item" style="${i===currentIdx?'border:1px solid #ff00ff':''}"><span>${i===currentIdx?'▶️ ':''}${p.title}</span>${isOwner?`<button onclick="goTo(${i})" style="background:#ff00ff;color:#fff;border:none;padding:4px 8px;border-radius:5px">Tocar</button>`:''}</div>`).join('');}
-function goTo(i){currentIdx=i;playRadio();}
-function toggleOwner(){if(isOwner){logoutOwner();return;}document.getElementById('loginModal').style.display='flex';}
-function closeModal(){document.getElementById('loginModal').style.display='none';}
-function doLogin(){const p=document.getElementById('passInput').value;if(p===OWNER_PASS){isOwner=true;document.body.classList.add('owner-active');closeModal();document.getElementById('ownerBtn').innerText='🚪 SAIR';document.getElementById('passInput').value='';renderRequests();renderQueue();}else alert('Senha errada! É XDS2024');}
-function logoutOwner(){isOwner=false;document.body.classList.remove('owner-active');document.getElementById('ownerBtn').innerText='👑 DONO';renderQueue();}
-setInterval(()=>{document.getElementById('listeners').innerText=Math.floor(2+Math.random()*20)},4000);
-renderRequests();renderQueue();
+
+function toggleOwner(){
+
+if(isOwner){
+logoutOwner();
+return;
+}
+
+document.getElementById("loginModal").style.display="flex";
+
+}
+
+function closeModal(){
+document.getElementById("loginModal").style.display="none";
+}
+
+function login(){
+
+if(document.getElementById("password").value===OWNER_PASS){
+
+isOwner=true;
+
+document.body.classList.add("owner-active");
+
+closeModal();
+
+renderPlaylist();
+
+}else{
+
+alert("Senha incorreta!");
+
+}
+
+document.getElementById("password").value="";
+
+}
+
+function logoutOwner(){
+
+isOwner=false;
+
+document.body.classList.remove("owner-active");
+
+renderPlaylist();
+
+}
+
+renderPlaylist();
+renderRequests();
+
 </script>
+
 </body>
 </html>
